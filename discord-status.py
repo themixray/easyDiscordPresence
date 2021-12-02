@@ -48,14 +48,3 @@ class presence:
                 if result != dsdk.Result.ok:
                     print(result)
             self.activity_manager.update_activity(self.activity, callback)
-d = presence(772915052969197619)
-d.connect()
-
-d.activity.state = '123'
-d.update()
-
-input()
-d.disconnect()
-# import requests
-#
-# print(requests.get('https://gist.githubusercontent.com/themixray/d5b5f4b69f08b16fa1a0dc5f281444b3/raw/9e16e1e251d0b9667377c4a2d7b9e8bdf3b36ee0/discord_game_sdk.dll').content)
