@@ -13,4 +13,4 @@ rpc.update()
 input('Close ')
 rpc.disconnect()
 ```
-Source of [rpc.activity](https://github.com/LennyPhoenix/py-discord-sdk/blob/master/discordsdk/activity.py)
+Source of [rpc.activity](https://github.com/LennyPhoenix/py-discord-sdk/blob/master/discordsdk/model.py)
