@@ -1,5 +1,6 @@
 # Easy Discord Presence
 [Original](https://github.com/LennyPhoenix/py-discord-sdk)
+
 **Requires:**
 * pywin32
 * discordsdk
