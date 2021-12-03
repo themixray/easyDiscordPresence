@@ -6,7 +6,6 @@
 * discordsdk
 * randstr
 * requests
-* shutil
 ## Quick Start
 ```python
 from edp import presence
