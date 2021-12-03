@@ -1,27 +1,47 @@
 import threading
 import time
-import os
 try:
     import discordsdk as dsdk
 except OSError:
-    import urllib.request
+    import requests
     import win32api
+    import zipfile
     import pathlib
-    url = 'http://main.trackly.site/discord_game_sdk.dll'
-    src = win32api.GetFullPathName(__file__)
-    src = str(pathlib.Path(src).parent)+'\\'
-    try:
-        os.mkdir(src+'lib')
-    except: pass
-    with open(src+'lib\\discord_game_sdk.dll','wb') as f:
-        f.write(urllib.request.urlopen(url).read())
-        f.close()
-    while 1:
-        try:
-            import discordsdk as dsdk
-            break
-        except: pass
+    import randstr
+    import struct
+    import shutil
+    import os
 
+    src = pathlib.Path(win32api.GetFullPathName(__file__)).parent
+    ap = lambda x: f'{src}\\{x}'
+
+    try: os.mkdir(ap('lib'))
+    except: pass
+
+    tp = f'temp_{randstr.randstr(15)}.zip'
+    with open(ap(tp),'wb') as f:
+        url = 'https://dl-game-sdk.discordapp' \
+              '.net/2.5.8/discord_game_sdk.zip'
+        f.write(requests.get(url).content)
+        f.close()
+
+    with zipfile.ZipFile(ap(tp),'r') as z:
+        t = "_64"if(struct.calcsize("P")*8==64)else""
+        z.extract(f'lib/x86{t}/discord_game_sdk.dll')
+        shutil.move(f'lib/x86{t}/discord_game_sdk.dll',
+        ap('lib/discord_game_sdk.dll'))
+    os.remove(tp)
+    def tryingToRemove():
+        while 1:
+            try:
+                os.remove(f'lib/x86{t}')
+                break
+            except:pass
+    threading.Thread(
+    target=tryingToRemove,
+    daemon=True).start()
+
+    import discordsdk as dsdk
 class presence:
     def __init__(self, client_id):
         self._started = False
@@ -44,7 +64,4 @@ class presence:
             del self.app
     def update(self):
         if self._started:
-            def callback(result):
-                if result != dsdk.Result.ok:
-                    print(result)
-            self.activity_manager.update_activity(self.activity, callback)
+            self.activity_manager.update_activity(self.activity,lambda x:None)
