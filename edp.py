@@ -3,28 +3,18 @@ import time
 try:
     import discordsdk as dsdk
 except OSError:
-    import requests
-    import win32api
-    import zipfile
-    import pathlib
-    import randstr
-    import struct
-    import shutil
-    import os
-
+    import requests,win32api,zipfile,\
+           pathlib,randstr,struct,shutil,os
     src = pathlib.Path(win32api.GetFullPathName(__file__)).parent
     ap = lambda x: f'{src}\\{x}'
-
     try: os.mkdir(ap('lib'))
     except: pass
-
     tp = f'temp_{randstr.randstr(15)}.zip'
     with open(ap(tp),'wb') as f:
         url = 'https://dl-game-sdk.discordapp' \
               '.net/2.5.8/discord_game_sdk.zip'
         f.write(requests.get(url).content)
         f.close()
-
     with zipfile.ZipFile(ap(tp),'r') as z:
         t = "_64"if(struct.calcsize("P")*8==64)else""
         z.extract(f'lib/x86{t}/discord_game_sdk.dll')
@@ -33,14 +23,11 @@ except OSError:
     os.remove(tp)
     def tryingToRemove():
         while 1:
-            try:
-                os.remove(f'lib/x86{t}')
-                break
+            try:os.remove(f'lib/x86{t}');break
             except:pass
     threading.Thread(
     target=tryingToRemove,
     daemon=True).start()
-
     import discordsdk as dsdk
 class presence:
     def __init__(self, client_id):
